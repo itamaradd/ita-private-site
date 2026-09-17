@@ -1,1 +1,487 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ITA // FUTURE CONTROL</title>
 
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: #050713;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* BACKGROUND */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 20%, #7c3aed55, transparent 30%),
+        radial-gradient(circle at 80% 25%, #06b6d455, transparent 30%),
+        radial-gradient(circle at 50% 90%, #ec489933, transparent 35%);
+    z-index: -2;
+}
+
+.grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(#ffffff09 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff09 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: -1;
+}
+
+.container {
+    width: min(1200px, 92%);
+    margin: auto;
+}
+
+/* NAV */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 0;
+}
+
+.logo {
+    font-weight: 900;
+    letter-spacing: 4px;
+    font-size: 20px;
+}
+
+.status {
+    padding: 10px 16px;
+    border: 1px solid #ffffff22;
+    background: #ffffff0d;
+    backdrop-filter: blur(15px);
+    border-radius: 50px;
+    font-size: 13px;
+}
+
+.dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    background: #45ffb1;
+    border-radius: 50%;
+    box-shadow: 0 0 15px #45ffb1;
+}
+
+/* HERO */
+.hero {
+    min-height: 62vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.orb {
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 35px;
+    border-radius: 50%;
+
+    background:
+        radial-gradient(circle at 30% 30%,
+        white,
+        #22d3ee 10%,
+        #7c3aed 45%,
+        #050713 75%);
+
+    box-shadow:
+        0 0 50px #22d3ee55,
+        0 0 100px #7c3aed77;
+
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    50% {
+        transform: translateY(-15px) scale(1.05);
+    }
+}
+
+h1 {
+    font-size: clamp(50px, 9vw, 110px);
+    line-height: .9;
+    margin: 0;
+
+    background: linear-gradient(
+        90deg,
+        white,
+        #67e8f9,
+        #c084fc,
+        #f472b6,
+        white
+    );
+
+    background-size: 300%;
+    -webkit-background-clip: text;
+    color: transparent;
+
+    animation: shine 7s linear infinite;
+}
+
+@keyframes shine {
+    to {
+        background-position: 300%;
+    }
+}
+
+.hero p {
+    color: #aab4cc;
+    font-size: 19px;
+    max-width: 650px;
+    margin: 25px auto;
+    line-height: 1.7;
+}
+
+button {
+    border: none;
+    padding: 15px 25px;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+.main-button {
+    background: white;
+    color: #080b16;
+}
+
+.main-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 45px #67e8f955;
+}
+
+/* DASHBOARD */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.card {
+    padding: 25px;
+    border-radius: 22px;
+
+    border: 1px solid #ffffff20;
+    background: #ffffff0c;
+    backdrop-filter: blur(20px);
+
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    border-color: #67e8f966;
+}
+
+.label {
+    color: #8b9bb8;
+    font-size: 13px;
+    letter-spacing: 2px;
+}
+
+.number {
+    font-size: 38px;
+    font-weight: 900;
+    margin-top: 12px;
+}
+
+.green {
+    color: #6ee7b7;
+}
+
+.blue {
+    color: #67e8f9;
+}
+
+.purple {
+    color: #c084fc;
+}
+
+/* TERMINAL */
+.terminal {
+    margin: 20px 0 60px;
+    padding: 25px;
+
+    direction: ltr;
+    text-align: left;
+
+    font-family: monospace;
+
+    border: 1px solid #ffffff20;
+    background: #02040bdd;
+    border-radius: 20px;
+}
+
+.command {
+    color: #6ee7b7;
+}
+
+.cursor {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* ALERT */
+#message {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+
+    padding: 16px 25px;
+
+    background: #111827;
+    border: 1px solid #67e8f955;
+    border-radius: 15px;
+
+    opacity: 0;
+    transition: .4s;
+}
+
+#message.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 750px) {
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    nav {
+        gap: 10px;
+    }
+
+    .status {
+        font-size: 11px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="grid"></div>
+
+<div class="container">
+
+<nav>
+
+    <div class="logo">
+        ITA // LAB
+    </div>
+
+    <div class="status">
+        <span class="dot"></span>
+        SYSTEM ONLINE ·
+        <span id="clock"></span>
+    </div>
+
+</nav>
+
+
+<section class="hero">
+
+<div>
+
+    <div class="orb"></div>
+
+    <h1>
+        FUTURE<br>
+        CONTROL
+    </h1>
+
+    <p>
+        ברוכים הבאים למערכת הניסוי של ITA.
+        מרכז שליטה עתידני שנבנה ישירות מתוך GitHub.
+        לחץ על הכפתור והפעל את המערכת.
+    </p>
+
+    <button class="main-button" onclick="ignite()">
+        ⚡ הפעל את המערכת
+    </button>
+
+</div>
+
+</section>
+
+
+<section class="dashboard">
+
+<div class="card">
+
+    <div class="label">
+        AI CORE
+    </div>
+
+    <div class="number purple" id="ai">
+        97%
+    </div>
+
+    <p>
+        Neural engine ready
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <div class="label">
+        NETWORK
+    </div>
+
+    <div class="number blue" id="network">
+        12.8 Gb/s
+    </div>
+
+    <p>
+        Global connection stable
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <div class="label">
+        SECURITY
+    </div>
+
+    <div class="number green" id="security">
+        SECURE
+    </div>
+
+    <p>
+        Zero Trust protection active
+    </p>
+
+</div>
+
+</section>
+
+
+<div class="terminal">
+
+<div>
+$ boot ita-future-control
+</div>
+
+<br>
+
+<div class="command">
+✓ interface loaded
+</div>
+
+<div class="command">
+✓ neural core online
+</div>
+
+<div class="command">
+✓ security layer active
+</div>
+
+<br>
+
+<div id="terminalText">
+$ waiting for command<span class="cursor">_</span>
+</div>
+
+</div>
+
+</div>
+
+
+<div id="message">
+🚀 SYSTEM ACTIVATED
+</div>
+
+
+<script>
+
+/* CLOCK */
+
+function updateClock() {
+
+    const now = new Date();
+
+    document.getElementById("clock").innerText =
+        now.toLocaleTimeString("he-IL");
+
+}
+
+setInterval(updateClock, 1000);
+
+updateClock();
+
+
+/* SYSTEM BUTTON */
+
+function ignite() {
+
+    document.getElementById("ai").innerText = "100%";
+
+    document.getElementById("network").innerText = "42.0 Gb/s";
+
+    document.getElementById("security").innerText = "MAXIMUM";
+
+    document.getElementById("terminalText").innerHTML =
+        '<span class="command">$ SYSTEM IGNITED — Welcome, Itamar.</span>';
+
+    const message =
+        document.getElementById("message");
+
+    message.classList.add("show");
+
+    document.body.animate(
+
+        [
+            { filter: "brightness(1)" },
+            { filter: "brightness(1.8)" },
+            { filter: "brightness(1)" }
+        ],
+
+        {
+            duration: 700
+        }
+
+    );
+
+    setTimeout(() => {
+
+        message.classList.remove("show");
+
+    }, 3000);
+
+}
+
+</script>
+
+</body>
+</html>
