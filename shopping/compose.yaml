@@ -1,0 +1,12 @@
+services:
+  shopping:
+    build: .
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - shopping-data:/app/data
+    restart: unless-stopped
+    environment:
+      APP_ORIGIN: http://localhost:3000
+volumes:
+  shopping-data:
